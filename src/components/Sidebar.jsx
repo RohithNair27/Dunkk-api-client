@@ -6,7 +6,7 @@ function Sidebar({ list }) {
   return (
     <aside className="rc-sidebar">
       <div className="rc-sidebar-header">
-        <div className="rc-sidebar-title">Relay</div>
+        <div className="rc-sidebar-title">Dunkk</div>
         <div className="rc-sidebar-sub">API client</div>
       </div>
 

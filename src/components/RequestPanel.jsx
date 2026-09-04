@@ -1,16 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-function RequestPanel({ save }) {
-  const [method, setMethod] = "GET";
+function RequestPanel({
+  save,
+  method,
+  onChange,
+  handleSend,
+  onChangeUrl,
+  urlError,
+  shakeTrigger,
+  onCompleteTyping,
+}) {
   const [url, setUrl] = "";
+  const [shaking, setShaking] = useState(false);
 
-  let handleSend = () => {};
+  useEffect(() => {
+    if (!shakeTrigger) return;
+    setShaking(true);
+    const t = setTimeout(() => setShaking(false), 400);
+    return () => clearTimeout(t);
+  }, [shakeTrigger]);
+
   return (
     <div className="rc-toolbar">
       <select
         className="rc-method-select"
         value={method}
-        onChange={(e) => setMethod(e.target.value)}
+        onChange={(e) => onChange(e.target.value)}
       >
         <option value="GET">GET</option>
         <option value="POST">POST</option>
@@ -19,18 +34,23 @@ function RequestPanel({ save }) {
         <option value="DELETE">DELETE</option>
       </select>
       <input
-        className="rc-url-input"
+        className={
+          "rc-url-input" +
+          (urlError ? " rc-input-error" : "") +
+          (shaking ? " rc-shake" : "")
+        }
         value={url}
-        onChange={(e) => setUrl(e.target.value)}
+        onChange={(e) => onChangeUrl(e.target.value)}
         onKeyDown={(e) => {
           if (e.key === "Enter") handleSend();
         }}
         placeholder="https://api.example.com/v1/resource"
         spellCheck={false}
+        onBlur={onCompleteTyping}
       />
       <button
         className="rc-send-btn"
-        onClick={handleSend}
+        onClick={() => handleSend()}
         disabled={false}
         style={{ background: false ? "#8FB5AE" : "var(--accent)" }}
       >
